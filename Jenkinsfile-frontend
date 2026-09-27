@@ -12,7 +12,7 @@ pipeline {
         ECS_CLUSTER = 'app3-cluster'
 
         // =========================================================
-        // App-1 images
+        // App-3 frontend images
         // =========================================================
 
         APP_IMAGE_DEV  = 'app-3-frontend-dev'
@@ -68,6 +68,7 @@ pipeline {
         // =========================================================
 
         stage('Promote Dev to QA') {
+
             when {
                 expression {
                     params.Environment == 'qa'
@@ -91,6 +92,7 @@ pipeline {
         // =========================================================
 
         stage('Promote QA to UAT') {
+
             when {
                 expression {
                     params.Environment == 'uat'
@@ -135,6 +137,7 @@ pipeline {
         // =========================================================
 
         stage('Promote UAT to PROD') {
+
             when {
                 expression {
                     params.Environment == 'prod'
@@ -157,33 +160,35 @@ pipeline {
         // DEPLOY FRONTEND
         // =========================================================
 
-        /*stage('Deploy frontend') {
+        /*
+        stage('Deploy frontend') {
 
             steps {
 
                 script {
 
-                    //def proxyService
+                    // def proxyService
 
-                    //if (params.Environment == 'dev') {
+                    // if (params.Environment == 'dev') {
 
-                        //proxyService = 'proxy-task-service-dev'
+                    //     proxyService = 'proxy-task-service-dev'
 
-                   // }
-                    //else if (params.Environment == 'qa') {
+                    // }
+                    // else if (params.Environment == 'qa') {
 
-                        //proxyService = 'proxy-task-service-uat'
+                    //     proxyService = 'proxy-task-service-qa'
 
-                    //}
-                   // else if (params.Environment == 'uat') {
+                    // }
+                    // else if (params.Environment == 'uat') {
 
-                       // proxyService = 'proxy-task-service-qa'
+                    //     proxyService = 'proxy-task-service-uat'
 
-                    //}
-                    //else if (params.Environment == 'prod') {
+                    // }
+                    // else if (params.Environment == 'prod') {
 
-                        //proxyService = 'proxy-task-service-prod'
-                    //}
+                    //     proxyService = 'proxy-task-service-prod'
+
+                    // }
 
                     deployToECS(
                         './frontend/proxy-task-definition.json',
@@ -192,7 +197,8 @@ pipeline {
                     )
                 }
             }
-        }*/
+        }
+        */
     }
 
     // =============================================================
@@ -282,7 +288,8 @@ def promoteImage(String sourceImage, String targetImage) {
 // TASK DEFINITION FUNCTION
 // =================================================================
 
-/*def deployToECS(
+/*
+def deployToECS(
     String taskDefinitionFile,
     String taskFamily,
     String ecsService
@@ -328,4 +335,5 @@ def promoteImage(String sourceImage, String targetImage) {
             --task-definition ${taskFamily}:${taskRevision} \\
             --region ${region}
     """
-}*/
+}
+*/
