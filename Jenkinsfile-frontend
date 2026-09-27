@@ -328,4 +328,4 @@ def promoteImage(String sourceImage, String targetImage) {
             --task-definition ${taskFamily}:${taskRevision} \\
             --region ${region}
     """
-}
+}*/
