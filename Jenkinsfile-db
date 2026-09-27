@@ -7,10 +7,7 @@ pipeline {
         ECR_REGISTRY_URL = "https://${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
         ECS_CLUSTER = 'app3-cluster'
     
-        // =========================================================
         // Database images
-        // =========================================================
-
         DATABASE_IMAGE_DEV  = 'app-3-db-dev'
         DATABASE_IMAGE_QA   = 'app-3-db-qa'
         DATABASE_IMAGE_UAT  = 'app-3-db-uat'
