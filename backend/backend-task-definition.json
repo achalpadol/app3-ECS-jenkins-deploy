@@ -1,5 +1,4 @@
 {
-  "taskDefinitionArn": "arn:aws:ecs:ap-south-1:552940445807:task-definition/app3-backend-task-definition:2",
   "containerDefinitions": [
     {
       "name": "Main",
