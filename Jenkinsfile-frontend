@@ -160,7 +160,7 @@ pipeline {
         // DEPLOY FRONTEND
         // =========================================================
 
-        /*
+        
         stage('Deploy frontend') {
 
             steps {
@@ -192,13 +192,13 @@ pipeline {
 
                     deployToECS(
                         './frontend/proxy-task-definition.json',
-                        'proxy-task-definition',
-                        'proxy-service-dev'
+                        'app3-frontend-task-definition',
+                        'frontend-service-dev'
                     )
                 }
             }
         }
-        */
+        
     }
 
     // =============================================================
@@ -288,7 +288,7 @@ def promoteImage(String sourceImage, String targetImage) {
 // TASK DEFINITION FUNCTION
 // =================================================================
 
-/*
+
 def deployToECS(
     String taskDefinitionFile,
     String taskFamily,
@@ -336,4 +336,3 @@ def deployToECS(
             --region ${region}
     """
 }
-*/
