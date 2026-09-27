@@ -1,12 +1,13 @@
 pipeline {
     agent any
+
     environment {
         AWS_REGION = 'ap-south-1'
         AWS_ACCOUNT_ID = '552940445807'
         ECR_REGISTRY = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
         ECR_REGISTRY_URL = "https://${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
         ECS_CLUSTER = 'app3-cluster'
-    
+
         // Database images
         DATABASE_IMAGE_DEV  = 'app-3-db-dev'
         DATABASE_IMAGE_QA   = 'app-3-db-qa'
@@ -22,7 +23,6 @@ pipeline {
     }
 
     parameters {
-
         choice(
             name: 'Environment',
             choices: ['dev', 'qa', 'uat', 'prod'],
@@ -45,9 +45,7 @@ pipeline {
             }
 
             steps {
-
                 script {
-
                     buildAndPush(
                         "${env.DATABASE_IMAGE_DEV}",
                         "${env.BUILD_CONTEXT}"
@@ -69,9 +67,7 @@ pipeline {
             }
 
             steps {
-
                 script {
-
                     promoteImage(
                         "${env.DATABASE_IMAGE_DEV}",
                         "${env.DATABASE_IMAGE_QA}"
@@ -93,9 +89,7 @@ pipeline {
             }
 
             steps {
-
                 script {
-
                     promoteImage(
                         "${env.DATABASE_IMAGE_QA}",
                         "${env.DATABASE_IMAGE_UAT}"
@@ -117,7 +111,6 @@ pipeline {
             }
 
             steps {
-
                 input(
                     message: 'Promote Database UAT image to PROD?',
                     ok: 'Proceed'
@@ -138,9 +131,7 @@ pipeline {
             }
 
             steps {
-
                 script {
-
                     promoteImage(
                         "${env.DATABASE_IMAGE_UAT}",
                         "${env.DATABASE_IMAGE_PROD}"
@@ -148,13 +139,15 @@ pipeline {
                 }
             }
         }
-    }
+
+        // =========================================================
+        // DEPLOY DB
+        // =========================================================
+
         stage('Deploy DB') {
 
             steps {
-
                 script {
-
                     deployToECS(
                         'db-task-definition.json',
                         'app3-db-task-definition',
@@ -163,19 +156,17 @@ pipeline {
                 }
             }
         }
+    }
 
     // =============================================================
     // POST
     // =============================================================
 
     post {
-
         always {
-
             deleteDir()
         }
     }
-    
 }
 
 // =================================================================
@@ -193,7 +184,6 @@ def buildAndPush(String DATABASE_IMAGE, String BUILD_CONTEXT) {
         "${env.ECR_REGISTRY_URL}",
         "ecr:${env.AWS_REGION}:${env.AWS_CREDENTIALS}"
     ) {
-
         image.push()
     }
 }
@@ -212,7 +202,6 @@ def promoteImage(String sourceImage, String targetImage) {
         "${env.ECR_REGISTRY_URL}",
         "ecr:${env.AWS_REGION}:${env.AWS_CREDENTIALS}"
     ) {
-
         docker.image(
             "${env.ECR_REGISTRY}/${sourceImage}:${env.GIT_COMMIT}"
         ).pull()
@@ -236,14 +225,15 @@ def promoteImage(String sourceImage, String targetImage) {
         "${env.ECR_REGISTRY_URL}",
         "ecr:${env.AWS_REGION}:${env.AWS_CREDENTIALS}"
     ) {
-
         docker.image(
             "${env.ECR_REGISTRY}/${targetImage}:${env.GIT_COMMIT}"
         ).push()
     }
 }
-    
-// TAsk definition function
+
+// =================================================================
+// TASK DEFINITION FUNCTION
+// =================================================================
 
 def deployToECS(String taskDefinitionFile, String taskFamily, String ecsService) {
 
