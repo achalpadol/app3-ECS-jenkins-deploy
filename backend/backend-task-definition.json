@@ -56,14 +56,10 @@
   "family": "app3-backend-task-definition",
   "executionRoleArn": "arn:aws:iam::552940445807:role/ecsTaskExecutionRole",
   "networkMode": "awsvpc",
-  "revision": 2,
   "volumes": [],
-  "status": "ACTIVE",
-  
   "requiresCompatibilities": [
     "FARGATE"
   ],
   "cpu": "1024",
   "memory": "3072"
-  
 }
