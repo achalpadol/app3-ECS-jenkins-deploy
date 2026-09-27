@@ -149,7 +149,7 @@ pipeline {
             steps {
                 script {
                     deployToECS(
-                        'db-task-definition.json',
+                        './db/db-task-definition.json',
                         'app3-db-task-definition',
                         'app3-db-service-dev'
                     )
