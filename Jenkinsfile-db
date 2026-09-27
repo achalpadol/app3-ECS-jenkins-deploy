@@ -152,7 +152,7 @@ pipeline {
             }
         }
     }
-       /* stage('Deploy DB') {
+        stage('Deploy DB') {
 
             steps {
 
@@ -248,7 +248,7 @@ def promoteImage(String sourceImage, String targetImage) {
     
 // TAsk definition function
 
-/*def deployToECS(String taskDefinitionFile, String taskFamily, String ecsService) {
+def deployToECS(String taskDefinitionFile, String taskFamily, String ecsService) {
 
     def environment = params.Environment
     def commitId = env.GIT_COMMIT
@@ -281,4 +281,4 @@ def promoteImage(String sourceImage, String targetImage) {
             --task-definition ${taskFamily}:${taskRevision} \
             --region ${region}
     """
-}*/
+}
