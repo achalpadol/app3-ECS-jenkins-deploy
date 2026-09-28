@@ -14,7 +14,12 @@
         }
       ],
       "essential": true,
-      "environment": [],
+      "environment": [
+        {
+          "name": "BACKEND_HOST",
+          "value": "app3-backend.employee.local"
+        }
+      ],
       "environmentFiles": [],
       "mountPoints": [],
       "volumesFrom": [],
