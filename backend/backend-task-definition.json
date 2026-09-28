@@ -24,10 +24,6 @@
           "value": "app3-db.ecs.employee.local"
         },
         {
-          "name": "SPRING_DATASOURCE_URL",
-          "value": "jdbc:mysql://app3-db.ecs.employee.local:3306/example"
-        },
-        {
           "name": "MYSQL_ROOT_PASSWORD",
           "value": "Achal123"
         },
