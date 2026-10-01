@@ -9,19 +9,19 @@ pipeline {
 
         ECR_REGISTRY = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
         ECR_REGISTRY_URL = "https://${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
-        ECS_CLUSTER = 'app3-cluster'
+        ECS_CLUSTER = 'dev-app-cluster'
 
         // =========================================================
         // App-3 frontend images
         // =========================================================
 
         APP_IMAGE_DEV  = 'app-3-frontend-dev'
-        APP_IMAGE_QA   = 'app-3-frontend-qa'
-        APP_IMAGE_UAT  = 'app-3-frontend-uat'
-        APP_IMAGE_PROD = 'app-3-frontend-prod'
+        // APP_IMAGE_QA   = 'app-3-frontend-qa'
+        // APP_IMAGE_UAT  = 'app-3-frontend-uat'
+        // APP_IMAGE_PROD = 'app-3-frontend-prod'
 
         // AWS credentials
-        AWS_CREDENTIALS = 'aws-credentials'
+        AWS_CREDENTIALS = 'aws'
 
         // Docker build context
         BUILD_CONTEXT    = './frontend'
@@ -67,94 +67,94 @@ pipeline {
         // QA
         // =========================================================
 
-        stage('Promote Dev to QA') {
+        // stage('Promote Dev to QA') {
 
-            when {
-                expression {
-                    params.Environment == 'qa'
-                }
-            }
+        //     when {
+        //         expression {
+        //             params.Environment == 'qa'
+        //         }
+        //     }
 
-            steps {
+        //     steps {
 
-                script {
+        //         script {
 
-                    promoteImage(
-                        "${env.APP_IMAGE_DEV}",
-                        "${env.APP_IMAGE_QA}"
-                    )
-                }
-            }
-        }
+        //             promoteImage(
+        //                 "${env.APP_IMAGE_DEV}",
+        //                 "${env.APP_IMAGE_QA}"
+        //             )
+        //         }
+        //     }
+        // }
 
         // =========================================================
         // UAT
         // =========================================================
 
-        stage('Promote QA to UAT') {
+        // stage('Promote QA to UAT') {
 
-            when {
-                expression {
-                    params.Environment == 'uat'
-                }
-            }
+        //     when {
+        //         expression {
+        //             params.Environment == 'uat'
+        //         }
+        //     }
 
-            steps {
+        //     steps {
 
-                script {
+        //         script {
 
-                    promoteImage(
-                        "${env.APP_IMAGE_QA}",
-                        "${env.APP_IMAGE_UAT}"
-                    )
-                }
-            }
-        }
+        //             promoteImage(
+        //                 "${env.APP_IMAGE_QA}",
+        //                 "${env.APP_IMAGE_UAT}"
+        //             )
+        //         }
+        //     }
+        // }
 
         // =========================================================
         // PROD APPROVAL
         // =========================================================
 
-        stage('Approval for Prod Deployment') {
+        // stage('Approval for Prod Deployment') {
 
-            when {
-                expression {
-                    params.Environment == 'prod'
-                }
-            }
+        //     when {
+        //         expression {
+        //             params.Environment == 'prod'
+        //         }
+        //     }
 
-            steps {
+        //     steps {
 
-                input(
-                    message: 'Promote UAT image to PROD?',
-                    ok: 'Proceed'
-                )
-            }
-        }
+        //         input(
+        //             message: 'Promote UAT image to PROD?',
+        //             ok: 'Proceed'
+        //         )
+        //     }
+        // }
 
         // =========================================================
         // PROD
         // =========================================================
 
-        stage('Promote UAT to PROD') {
+        // stage('Promote UAT to PROD') {
 
-            when {
-                expression {
-                    params.Environment == 'prod'
-                }
-            }
+        //     when {
+        //         expression {
+        //             params.Environment == 'prod'
+        //         }
+        //     }
 
-            steps {
+        //     steps {
 
-                script {
+        //         script {
 
-                    promoteImage(
-                        "${env.APP_IMAGE_UAT}",
-                        "${env.APP_IMAGE_PROD}"
-                    )
-                }
-            }
-        }
+        //             promoteImage(
+        //                 "${env.APP_IMAGE_UAT}",
+        //                 "${env.APP_IMAGE_PROD}"
+        //             )
+        //         }
+        //     }
+        // }
 
         // =========================================================
         // DEPLOY FRONTEND
@@ -192,8 +192,8 @@ pipeline {
 
                     deployToECS(
                         './frontend/proxy-task-definition.json',
-                        'app3-frontend-task-definition',
-                        'frontend-service-dev'
+                        'dev-frontend',
+                        'dev-frontend-service'
                     )
                 }
             }

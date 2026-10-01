@@ -8,19 +8,19 @@ pipeline {
         ECR_REGISTRY = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
         ECR_REGISTRY_URL = "https://${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
 
-        ECS_CLUSTER = 'app3-cluster'
+        ECS_CLUSTER = 'dev-app-cluster'
 
         // =========================================================
         // Backend images
         // =========================================================
 
         BACKEND_IMAGE_DEV  = 'app-3-backend-dev'
-        BACKEND_IMAGE_QA   = 'app-3-backend-qa'
-        BACKEND_IMAGE_UAT  = 'app-3-backend-uat'
-        BACKEND_IMAGE_PROD = 'app-3-backend-prod'
+        // BACKEND_IMAGE_QA   = 'app-3-backend-qa'
+        // BACKEND_IMAGE_UAT  = 'app-3-backend-uat'
+        // BACKEND_IMAGE_PROD = 'app-3-backend-prod'
 
         // AWS credentials
-        AWS_CREDENTIALS = 'aws-credentials'
+        AWS_CREDENTIALS = 'aws'
 
         // Backend Docker build context
         BUILD_CONTEXT = './backend'
@@ -42,118 +42,118 @@ pipeline {
         // DEV
         // =========================================================
 
-        stage('Dev - Build & Push Backend') {
+        // stage('Dev - Build & Push Backend') {
 
-            when {
-                expression {
-                    params.Environment == 'dev'
-                }
-            }
+        //     when {
+        //         expression {
+        //             params.Environment == 'dev'
+        //         }
+        //     }
 
-            steps {
+        //     steps {
 
-                script {
+        //         script {
 
-                    buildAndPush(
-                        "${env.BACKEND_IMAGE_DEV}",
-                        "${env.BUILD_CONTEXT}"
-                    )
-                }
-            }
-        }
+        //             buildAndPush(
+        //                 "${env.BACKEND_IMAGE_DEV}",
+        //                 "${env.BUILD_CONTEXT}"
+        //             )
+        //         }
+        //     }
+        // }
 
         // =========================================================
         // QA
         // =========================================================
 
-        stage('Promote Backend Dev to QA') {
+        // stage('Promote Backend Dev to QA') {
 
-            when {
-                expression {
-                    params.Environment == 'qa'
-                }
-            }
+        //     when {
+        //         expression {
+        //             params.Environment == 'qa'
+        //         }
+        //     }
 
-            steps {
+        //     steps {
 
-                script {
+        //         script {
 
-                    promoteImage(
-                        "${env.BACKEND_IMAGE_DEV}",
-                        "${env.BACKEND_IMAGE_QA}"
-                    )
-                }
-            }
-        }
+        //             promoteImage(
+        //                 "${env.BACKEND_IMAGE_DEV}",
+        //                 "${env.BACKEND_IMAGE_QA}"
+        //             )
+        //         }
+        //     }
+        // }
 
         // =========================================================
         // UAT
         // =========================================================
 
-        stage('Promote Backend QA to UAT') {
+        // stage('Promote Backend QA to UAT') {
 
-            when {
-                expression {
-                    params.Environment == 'uat'
-                }
-            }
+        //     when {
+        //         expression {
+        //             params.Environment == 'uat'
+        //         }
+        //     }
 
-            steps {
+        //     steps {
 
-                script {
+        //         script {
 
-                    promoteImage(
-                        "${env.BACKEND_IMAGE_QA}",
-                        "${env.BACKEND_IMAGE_UAT}"
-                    )
-                }
-            }
-        }
+        //             promoteImage(
+        //                 "${env.BACKEND_IMAGE_QA}",
+        //                 "${env.BACKEND_IMAGE_UAT}"
+        //             )
+        //         }
+        //     }
+        // }
 
         // =========================================================
         // PROD APPROVAL
         // =========================================================
 
-        stage('Approval for Backend Prod Deployment') {
+        // stage('Approval for Backend Prod Deployment') {
 
-            when {
-                expression {
-                    params.Environment == 'prod'
-                }
-            }
+        //     when {
+        //         expression {
+        //             params.Environment == 'prod'
+        //         }
+        //     }
 
-            steps {
+        //     steps {
 
-                input(
-                    message: 'Promote Backend UAT image to PROD?',
-                    ok: 'Proceed'
-                )
-            }
-        }
+        //         input(
+        //             message: 'Promote Backend UAT image to PROD?',
+        //             ok: 'Proceed'
+        //         )
+        //     }
+        // }
 
         // =========================================================
         // PROD
         // =========================================================
 
-        stage('Promote Backend UAT to PROD') {
+        // stage('Promote Backend UAT to PROD') {
 
-            when {
-                expression {
-                    params.Environment == 'prod'
-                }
-            }
+        //     when {
+        //         expression {
+        //             params.Environment == 'prod'
+        //         }
+        //     }
 
-            steps {
+        //     steps {
 
-                script {
+        //         script {
 
-                    promoteImage(
-                        "${env.BACKEND_IMAGE_UAT}",
-                        "${env.BACKEND_IMAGE_PROD}"
-                    )
-                }
-            }
-        }
+        //             promoteImage(
+        //                 "${env.BACKEND_IMAGE_UAT}",
+        //                 "${env.BACKEND_IMAGE_PROD}"
+        //             )
+        //         }
+        //     }
+        // }
 
         // =========================================================
         // DEPLOY BACKEND TO ECS
@@ -167,8 +167,8 @@ pipeline {
 
                     deployToECS(
                         './backend/backend-task-definition.json',
-                        'app3-backend-task-definition',
-                        'app3-backend-service-dev'
+                        'dev-backend',
+                        'dev-backend-service'
                     )
                 }
             }

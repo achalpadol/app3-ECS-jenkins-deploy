@@ -6,16 +6,16 @@ pipeline {
         AWS_ACCOUNT_ID = '552940445807'
         ECR_REGISTRY = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
         ECR_REGISTRY_URL = "https://${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
-        ECS_CLUSTER = 'app3-cluster'
+        ECS_CLUSTER = 'dev-app-cluster'
 
         // Database images
         DATABASE_IMAGE_DEV  = 'app-3-db-dev'
-        DATABASE_IMAGE_QA   = 'app-3-db-qa'
-        DATABASE_IMAGE_UAT  = 'app-3-db-uat'
-        DATABASE_IMAGE_PROD = 'app-3-db-prod'
+        // DATABASE_IMAGE_QA   = 'app-3-db-qa'
+        // DATABASE_IMAGE_UAT  = 'app-3-db-uat'
+        // DATABASE_IMAGE_PROD = 'app-3-db-prod'
 
         // AWS credentials
-        AWS_CREDENTIALS = 'aws-credentials'
+        AWS_CREDENTIALS = 'aws'
 
         // Database Docker build context
         BUILD_CONTEXT = './db'
@@ -58,87 +58,87 @@ pipeline {
         // QA
         // =========================================================
 
-        stage('Promote Database Dev to QA') {
+        // stage('Promote Database Dev to QA') {
 
-            when {
-                expression {
-                    params.Environment == 'qa'
-                }
-            }
+        //     when {
+        //         expression {
+        //             params.Environment == 'qa'
+        //         }
+        //     }
 
-            steps {
-                script {
-                    promoteImage(
-                        "${env.DATABASE_IMAGE_DEV}",
-                        "${env.DATABASE_IMAGE_QA}"
-                    )
-                }
-            }
-        }
+        //     steps {
+        //         script {
+        //             promoteImage(
+        //                 "${env.DATABASE_IMAGE_DEV}",
+        //                 "${env.DATABASE_IMAGE_QA}"
+        //             )
+        //         }
+        //     }
+        // }
 
         // =========================================================
         // UAT
         // =========================================================
 
-        stage('Promote Database QA to UAT') {
+        // stage('Promote Database QA to UAT') {
 
-            when {
-                expression {
-                    params.Environment == 'uat'
-                }
-            }
+        //     when {
+        //         expression {
+        //             params.Environment == 'uat'
+        //         }
+        //     }
 
-            steps {
-                script {
-                    promoteImage(
-                        "${env.DATABASE_IMAGE_QA}",
-                        "${env.DATABASE_IMAGE_UAT}"
-                    )
-                }
-            }
-        }
+        //     steps {
+        //         script {
+        //             promoteImage(
+        //                 "${env.DATABASE_IMAGE_QA}",
+        //                 "${env.DATABASE_IMAGE_UAT}"
+        //             )
+        //         }
+        //     }
+        // }
 
         // =========================================================
         // PROD APPROVAL
         // =========================================================
 
-        stage('Approval for Database Prod Deployment') {
+        // stage('Approval for Database Prod Deployment') {
 
-            when {
-                expression {
-                    params.Environment == 'prod'
-                }
-            }
+        //     when {
+        //         expression {
+        //             params.Environment == 'prod'
+        //         }
+        //     }
 
-            steps {
-                input(
-                    message: 'Promote Database UAT image to PROD?',
-                    ok: 'Proceed'
-                )
-            }
-        }
+        //     steps {
+        //         input(
+        //             message: 'Promote Database UAT image to PROD?',
+        //             ok: 'Proceed'
+        //         )
+        //     }
+        // }
 
         // =========================================================
         // PROD
         // =========================================================
 
-        stage('Promote Database UAT to PROD') {
+        // stage('Promote Database UAT to PROD') {
 
-            when {
-                expression {
-                    params.Environment == 'prod'
-                }
-            }
+        //     when {
+        //         expression {
+        //             params.Environment == 'prod'
+        //         }
+        //     }
 
-            steps {
-                script {
-                    promoteImage(
-                        "${env.DATABASE_IMAGE_UAT}",
-                        "${env.DATABASE_IMAGE_PROD}"
-                    )
-                }
-            }
-        }
+        //     steps {
+        //         script {
+        //             promoteImage(
+        //                 "${env.DATABASE_IMAGE_UAT}",
+        //                 "${env.DATABASE_IMAGE_PROD}"
+        //             )
+        //         }
+        //     }
+        // }
 
         // =========================================================
         // DEPLOY DB
@@ -150,8 +150,8 @@ pipeline {
                 script {
                     deployToECS(
                         './db/db-task-definition.json',
-                        'app3-db-task-definition',
-                        'app3-db-service-dev'
+                        'dev-db',
+                        'dev-db-service'
                     )
                 }
             }
